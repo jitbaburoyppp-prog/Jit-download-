@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeet Downloader</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #101828, #173b59);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+      padding: 28px 22px;
+      border-radius: 22px;
+      background: #ffffff12;
+      border: 1px solid #ffffff25;
+      text-align: center;
+      box-shadow: 0 15px 40px #0004;
+    }
+
+    .logo {
+      font-size: 44px;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      margin: 8px 0;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #d0dbea;
+      line-height: 1.6;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid #9aabc0;
+      background: #fff;
+      color: #182230;
+      font-size: 15px;
+      outline: none;
+      margin-bottom: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin: 6px 0;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .video {
+      background: #22c55e;
+      color: #062b16;
+    }
+
+    .audio {
+      background: #38bdf8;
+      color: #06263a;
+    }
+
+    .note {
+      color: #d0dbea;
+      font-size: 12px;
+      line-height: 1.7;
+      margin-top: 18px;
+    }
+
+    footer {
+      color: #b8c7d9;
+      font-size: 12px;
+      margin-top: 22px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <div class="logo">⬇️</div>
+
+    <h1>Jeet Downloader</h1>
+
+    <p class="subtitle">
+      তোমার ভিডিও বা অডিওর লিংক এখানে বসাও
+    </p>
+
+    <input
+      type="url"
+      id="mediaLink"
+      placeholder="ভিডিও বা অডিওর লিংক বসাও"
+      autocomplete="url"
+    >
+
+    <button class="video" onclick="openDownloader('video')">
+      🎬 ভিডিও ডাউনলোড করুন
+    </button>
+
+    <button class="audio" onclick="openDownloader('audio')">
+      🎵 অডিও ডাউনলোড করুন
+    </button>
+
+    <p class="note" id="message">
+      বোতামে চাপ দিলে Muka খুলবে।
+      সেখানে লিংক পেস্ট করে ডাউনলোডের
+      অপশন বেছে নাও।
+    </p>
+
+    <footer>
+      © 2026 Jeet Downloader
+    </footer>
+  </main>
+
+  <script>
+    function openDownloader(type) {
+      const input = document.getElementById("mediaLink");
+      const message = document.getElementById("message");
+      const link = input.value.trim();
+
+      if (!link) {
+        message.textContent =
+          "আগে ভিডিও বা অডিওর লিংক বসাও।";
+        input.focus();
+        return;
+      }
+
+      try {
+        const url = new URL(link);
+
+        if (url.protocol !== "https:" &&
+            url.protocol !== "http:") {
+          throw new Error("Invalid URL");
+        }
+      } catch (error) {
+        message.textContent =
+          "সঠিক ওয়েব লিংক বসাও।";
+        return;
+      }
+
+      const mukaTab = window.open(
+        "https://mukasaver.com",
+        "_blank"
+      );
+
+      if (!mukaTab) {
+        message.textContent =
+          "Muka খুলতে ব্রাউজারের নতুন ট্যাবের অনুমতি দাও।";
+      }
+
+      if (navigator.clipboard &&
+          window.isSecureContext) {
+        navigator.clipboard.writeText(link)
+          .then(() => {
+            message.textContent =
+              "লিংক কপি হয়েছে। Muka-তে গিয়ে পেস্ট করো এবং " +
+              (type === "video" ? "ভিডিও" : "অডিও") +
+              ডাউনলোডের অপশন বেছে নাও।";
+          })
+          .catch(() => {
+            message.textContent =
+              "লিংকটি কপি করে Muka-তে পেস্ট করো।";
+          });
+      } else {
+        message.textContent =
+          "লিংকটি কপি করে Muka-তে পেস্ট করো।";
+      }
+    }
+  </script>
+</body>
+</html>
